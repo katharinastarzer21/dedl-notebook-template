@@ -13,11 +13,6 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-
     - name: Install Conda
       uses: conda-incubator/setup-miniconda@v2
       with:
@@ -25,16 +20,14 @@ jobs:
         environment-file: environment.yml
         activate-environment: dedl-notebook-dev
 
-    - name: Install dependencies
+    - name: Install Dependencies (Fallback)
       run: |
-        python -m pip install --upgrade pip
-        pip install jupyter-book
-
-    - name: Install jq
-      run: sudo apt-get install jq
+        pip install jupyter-book matplotlib numpy jq
 
     - name: Fetch Issue Data
-      run: echo "${{ toJson(github.event) }}" > event.json
+      run: |
+        echo "${{ toJson(github.event) }}" > event.json
+        cat event.json
 
     - name: Extract Repository URL
       id: extract
@@ -48,9 +41,28 @@ jobs:
         git clone ${{ steps.extract.outputs.repo_url }} new_repo
         ls new_repo
 
+    - name: Find Notebooks in Submitted Repository
+      id: find_notebooks
+      run: |
+        find new_repo -name "*.ipynb" > notebooks_list.txt
+        cat notebooks_list.txt
+        echo "::set-output name=notebooks::$(cat notebooks_list.txt)"
+      
     - name: Update _toc.yml
       run: |
-        echo "- file: new_repo/README" >> _toc.yml
+        echo "format: jb-book" > _toc.yml
+        echo "root: README" >> _toc.yml
+        echo "" >> _toc.yml
+        echo "chapters:" >> _toc.yml
+
+        notebooks=$(cat notebooks_list.txt)
+        IFS=$'\n'
+        for notebook in $notebooks; do
+          # Entferne den 'new_repo/' Prefix und die Dateiendung '.ipynb'
+          notebook_path=$(echo "$notebook" | sed 's|new_repo/||' | sed 's|.ipynb||')
+          echo "  - file: ${notebook_path}" >> _toc.yml
+        done
+        cat _toc.yml
 
     - name: Build the Book
       run: |
