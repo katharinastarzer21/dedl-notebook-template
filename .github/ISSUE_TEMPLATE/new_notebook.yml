@@ -1,27 +1,19 @@
 name: New Notebook Submission
-description: Issue Template für neue Notebook Einreichungen
-title: "[New Notebook] <Notebook Name>"
+description: Issue Template for submitting a new notebook to the gallery
+title: "[New Notebook] <Notebook Title>"
 labels: submission, pending-review
-assignees: katharina-starzer
+assignees: katharinastarzer21
 
 body:
-  - type: markdown
-    attributes:
-      value: |
-        **Bitte fülle die folgenden Informationen aus, um ein neues Notebook zur Gallery hinzuzufügen.**
   - type: input
     id: notebook-name
     attributes:
       label: Notebook Name
-      description: Der Name des neuen Notebooks
-      placeholder: Beispiel-Notebook
+      placeholder: Your notebook name here
     validations:
       required: true
   - type: textarea
     id: description
     attributes:
-      label: Beschreibung
-      description: Kurzbeschreibung des Notebooks
-      placeholder: Beschreibung des Inhalts
-    validations:
-      required: true
+      label: Description
+      placeholder: Brief description of your notebook
