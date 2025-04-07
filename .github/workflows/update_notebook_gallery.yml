@@ -1,4 +1,4 @@
-name: Update Notebook Gallery
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -28,13 +28,8 @@ jobs:
       run: |
         jupyter-book build .
 
-    - name: Check if build directory exists
-      run: |
-        if [ -d "_build/html" ]; then echo "Build directory exists."; else echo "Build directory does NOT exist."; fi
-
-    - name: Upload HTML files as artifact
-      if: success() && always()  # Ensures that the upload only happens if the build step was successful
-      uses: actions/upload-artifact@@v3.1.0
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        name: html-site
-        path: _build/html
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: _build/html
