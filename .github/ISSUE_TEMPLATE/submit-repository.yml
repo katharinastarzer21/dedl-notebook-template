@@ -1,0 +1,25 @@
+name: Submit New Repository
+description: Use this template to submit a new repository to the gallery
+title: "[New Repository] <Repository Name>"
+labels: submission, pending-review
+body:
+  - type: input
+    id: repo-name
+    attributes:
+      label: Repository Name
+      placeholder: Enter the name of your repository
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Brief description of what the repository contains.
+  - type: textarea
+    id: repo-url
+    attributes:
+      label: Repository URL
+      description: Provide the URL of your repository (e.g., `https://github.com/username/my-repo`)
+      placeholder: https://github.com/username/my-repo
+    validations:
+      required: true
