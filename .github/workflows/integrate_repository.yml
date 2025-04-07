@@ -23,13 +23,16 @@ jobs:
         python -m pip install --upgrade pip
         pip install jupyter-book
 
+    - name: Install jq
+      run: sudo apt-get install jq
+
     - name: Fetch Issue Data
-      run: echo ${{ toJson(github.event) }} > event.json
+      run: echo "${{ toJson(github.event) }}" > event.json
 
     - name: Extract Repository URL
       id: extract
       run: |
-        repo_url=$(jq -r '.issue.body | capture("Repository URL\\s*:\\s*(?<url>https://github.com/[^\\s]+)").url' event.json)
+        repo_url=$(cat event.json | jq -r '.issue.body' | grep -o 'https://github.com/[^ ]*')
         echo "Repository URL: $repo_url"
         echo "::set-output name=repo_url::$repo_url"
 
