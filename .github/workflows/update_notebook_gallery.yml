@@ -34,7 +34,7 @@ jobs:
 
     - name: Upload HTML files as artifact
       if: success() && always()  # Ensures that the upload only happens if the build step was successful
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: html-site
         path: _build/html
