@@ -32,9 +32,13 @@ jobs:
     - name: Extract Repository URL
       id: extract
       run: |
-        repo_url=$(cat event.json | jq -r '.issue.body' | grep -o 'https://github.com/[^ ]*')
-        echo "Repository URL: $repo_url"
-        echo "::set-output name=repo_url::$repo_url"
+          echo "Issue Body Content:"
+          echo "${{ github.event.issue.body }}"
+          
+          repo_url=$(echo "${{ github.event.issue.body }}" | grep -o 'https://github.com/[^ ]*')
+          
+          echo "Extracted URL: $repo_url"
+          echo "::set-output name=repo_url::$repo_url"
 
     - name: Clone Submitted Repository
       run: |
