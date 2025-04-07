@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Update Notebook Gallery
 
 on:
   push:
@@ -28,8 +28,8 @@ jobs:
       run: |
         jupyter-book build .
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Upload HTML files as artifact
+      uses: actions/upload-artifact@v3  # Or try v2 if this doesn't work
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: _build/html
+        name: html-site
+        path: _build/html
