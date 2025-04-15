@@ -1,0 +1,71 @@
+name: Integrate Submitted Repository
+
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  integrate:
+    if: contains(github.event.issue.labels.*.name, 'pending-review')
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Gallery Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install Jupyter Book
+      run: pip install jupyter-book
+
+    - name: Extract Repository URL from Issue Form
+      id: extract
+      run: |
+        echo "Issue body:"
+        echo "${{ github.event.issue.body }}"
+
+        # Extrahiere die Repository-URL aus dem Issue-Formularfeld
+        repo_url=$(echo "${{ github.event.issue.body }}" | grep -i "repo-url:" | cut -d':' -f2- | xargs)
+        repo_name=$(basename "$repo_url")
+
+        echo "repo_url=$repo_url" >> $GITHUB_ENV
+        echo "repo_name=$repo_name" >> $GITHUB_ENV
+
+    - name: Clone Submitted Repository
+      run: |
+        mkdir -p gallery
+        git clone ${{ env.repo_url }} gallery/${{ env.repo_name }}
+        ls gallery/${{ env.repo_name }}
+
+    - name: Find Notebooks
+      id: notebooks
+      run: |
+        find gallery/${{ env.repo_name }} -name "*.ipynb" > notebooks.txt
+        cat notebooks.txt
+
+    - name: Update TOC with New Notebooks
+      run: |
+        echo "format: jb-book" > _toc.yml
+        echo "root: index" >> _toc.yml
+        echo "" >> _toc.yml
+        echo "chapters:" >> _toc.yml
+
+        find gallery -name "*.ipynb" | sort | while read notebook; do
+          # Entferne ".ipynb" Endung
+          path=$(echo "$notebook" | sed 's|.ipynb$||')
+          echo "  - file: ${path}" >> _toc.yml
+        done
+
+        cat _toc.yml
+
+    - name: Build Jupyter Book
+      run: jupyter-book build .
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: _build/html
