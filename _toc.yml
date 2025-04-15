@@ -2,4 +2,4 @@ format: jb-book
 root: index
 
 chapters:
-  - file: gallery/example_notebook
+  - file: notebooks/example_notebook
