@@ -1,5 +1,5 @@
 format: jb-book
-root: README
+root: index
 
 chapters:
-  - file: notebooks/example_notebook
+  - file: gallery/placeholder
