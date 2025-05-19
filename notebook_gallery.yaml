@@ -1,0 +1,28 @@
+define: https://github.com/destination-earth/DestinE-DataLake-Lab
+domains:
+  HDA:
+    title: Harmonised Data Access
+    branch: main
+    root_path: HDA
+    description: "The Harmonised Data Access provides a single-entry point for accessing\
+      \ \nthe Destination Earth Data lake data. HDA exposes a set of RESTful APIs\
+      \ \nfor programmatic access to data, along with a STAC 1.0.0-compliant interface.\n"
+    thumbnail: https://platform.destine.eu/wp-content/uploads/2024/03/hdade-01-UA.jpg
+    url: https://destination-earth.github.io/DestinE-DataLake-Lab/HDA/README.html
+  STACK:
+    title: STACK Services
+    branch: main
+    root_path: STACK
+    description: "A big data processing service offering providing hosted applications\
+      \ and environments \nsuch as JupyterHub, Dask and Open Data Cube.\n"
+    thumbnail: https://platform.destine.eu/wp-content/uploads/2024/03/stack-de-01.jpg
+    url: https://destination-earth.github.io/DestinE-DataLake-Lab/STACK/README.html
+  HOOK:
+    title: Hook Service
+    branch: main
+    root_path: HOOK
+    description: "A DestinE Data Lake service providing high level pre-defined and\
+      \ user-defined \nfunctions (conceptually like FaaS) that users can invoke from\
+      \ their applications \nand apply on the DestinE Data Lake data.\n"
+    thumbnail: https://platform.destine.eu/wp-content/uploads/2024/03/hook-de-01.jpg
+    url: https://destination-earth.github.io/DestinE-DataLake-Lab/HOOK/README.html
