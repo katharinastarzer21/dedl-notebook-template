@@ -32,7 +32,7 @@ jobs:
           if [ -d cookbooks ]; then
             cp -r cookbooks/* _site/
           else
-            echo "ℹ️ No cookbooks directory to copy"
+            echo "No cookbooks directory to copy"
           fi
 
       - name: Disable Jekyll (allow folders like _static)

@@ -71,7 +71,7 @@ if missing:
 
 
 username_repo = repo_url.replace("https://github.com/", "")
-url = f"https://{username_repo.split('/')[0]}.github.io/{username_repo.split('/')[1]}/cookbooks/{root_path}/index.html"
+url = f"https://katharinastarzer21.github.io/testing_notebooks/cookbooks/{root_path}/index.html"
 
 
 if not preview_mode:
