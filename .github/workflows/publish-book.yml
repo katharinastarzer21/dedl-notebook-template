@@ -27,10 +27,14 @@ jobs:
           sphinx-build -b html docs _site -c docs
 
           
-      - name: Copy built cookbooks into _site
+      - name: Copy built cookbooks into _site (if exists)
         run: |
-          cp -r cookbooks/* _site/
-          
+          if [ -d cookbooks ]; then
+            cp -r cookbooks/* _site/
+          else
+            echo "ℹ️ No cookbooks directory to copy"
+          fi
+
       - name: Disable Jekyll (allow folders like _static)
         run: touch _site/.nojekyll
 
