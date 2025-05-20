@@ -42,13 +42,3 @@ functions (conceptually like FaaS) that users can invoke from their applications
 and apply on the DestinE Data Lake data.
 
 :::
-
-
-:::{grid-item-card} First REal Template
-:shadow: md
-:link: https://katharinastarzer21.github.io/DestinE/TESTTEMPLATE/index.html
-:img-top: _No response_
-first rea template
-:::
-
-::::
