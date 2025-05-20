@@ -44,9 +44,9 @@ jobs:
           git clone --branch gh-pages --depth 1 https://github.com/${{ github.repository }} temp-gh-pages
           if [ -f temp-gh-pages/notebook_gallery.yaml ]; then
             cp temp-gh-pages/notebook_gallery.yaml .
-            echo "Loaded existing gallery config from gh-pages"
+            echo "✅ Loaded existing gallery config from gh-pages"
           else
-            echo "No existing gallery config found starting fresh"
+            echo "⚠️ No existing gallery config found – starting fresh"
             echo "domains: {}" > notebook_gallery.yaml
           fi
 
@@ -57,8 +57,8 @@ jobs:
 
       - name: DEBUG check gallery file & root path
         run: |
-          echo "Did parse_issue.py run?"
-          ls -la notebook_gallery.yaml || echo "notebook_gallery.yaml missing!"
+          echo "✅ Did parse_issue.py run?"
+          ls -la notebook_gallery.yaml || echo "❌ notebook_gallery.yaml missing!"
           echo "→ ROOT_PATH: $ROOT_PATH"
 
       - name: Clone submitted cookbook
