@@ -1,0 +1,8 @@
+domains:
+  SECONDTEST:
+    title: Second Test
+    branch: main
+    root_path: SECONDTEST
+    description: Second Test
+    thumbnail: _No response_
+    url: https://katharinastarzer21.github.io/dedl-notebook-template/cookbooks/SECONDTEST/index.html
