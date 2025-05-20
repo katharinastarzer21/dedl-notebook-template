@@ -3,7 +3,6 @@ import sys
 import os
 
 preview_mode = "--preview" in sys.argv
-print(f"PREVIEW MODE: {preview_mode}")
 
 gallery_path = "notebook_gallery.yaml"
 
@@ -26,10 +25,6 @@ if not preview_mode:
 
 with open('issue_body.txt') as f:
     body = f.read()
-
-print("📝 Full Issue Body:")
-print(body)
-
 
 fields = {
     "Repository URL": "",
@@ -57,14 +52,6 @@ description = fields["Short Description"]
 thumbnail = fields["Thumbnail Image URL"]
 root_path = fields["Root Path Name"]
 
-print("\n🔍 Extracted Fields:")
-print(f"→ Repo URL     : {repo_url}")
-print(f"→ Title        : {title}")
-print(f"→ Description  : {description}")
-print(f"→ Thumbnail    : {thumbnail}")
-print(f"→ Root Path    : {root_path}")
-
-
 missing = [k for k, v in fields.items() if not v]
 if missing:
     raise ValueError(f"Fehlende Felder im Issue Body: {', '.join(missing)}")
@@ -75,7 +62,6 @@ url = f"https://katharinastarzer21.github.io/dedl-notebook-template/cookbooks/{r
 
 
 if not preview_mode:
-    print(f"\n📚 Eintrag wird hinzugefügt: {root_path}")
     gallery['domains'][root_path] = {
         'title': title,
         'branch': 'main',
@@ -87,9 +73,9 @@ if not preview_mode:
 
     with open(gallery_path, 'w') as f:
         yaml.dump(gallery, f, sort_keys=False)
-    print("notebook_gallery.yaml wurde erfolgreich aktualisiert")
+    
 
 with open(os.environ['GITHUB_ENV'], 'a') as env_file:
     env_file.write(f"REPO_URL={repo_url}\n")
     env_file.write(f"ROOT_PATH={root_path}\n")
-print("Umgebungsvariablen exportiert")
+
