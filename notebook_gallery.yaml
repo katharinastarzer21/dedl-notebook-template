@@ -1,0 +1,8 @@
+domains:
+  FIRSTTESET:
+    title: First test
+    branch: main
+    root_path: FIRSTTESET
+    description: short first test
+    thumbnail: _No response_
+    url: https://katharinastarzer21.github.io/testing_notebooks.git/cookbooks/FIRSTTESET/index.html
