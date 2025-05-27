@@ -1,0 +1,6 @@
+domains:
+  ExampleCookbook:
+    title: My Awesome Cookbook
+    url: /production/ExampleCookbook/
+    thumbnail: https://link.to/image.jpg
+    description: What is this cookbook about?
