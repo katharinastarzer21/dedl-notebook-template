@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout workflow repository
         uses: actions/checkout@v4
+      
+      - name: Install required packages
+        run: |
+          pip install -r templates/requirements.txt
+          pip install pyyaml
 
       - name: Save issue body to file
         run: echo "${{ github.event.issue.body }}" > issue_body.txt
