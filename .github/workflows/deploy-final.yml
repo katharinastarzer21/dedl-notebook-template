@@ -1,124 +1,52 @@
-name: Final Cookbook Deployment
+name: "Cookbook Production Build"
 
 on:
   issues:
     types: [closed]
 
 jobs:
-  deploy-final:
-    if: contains(github.event.issue.labels.*.name, 'add-repo')
+  deploy:
+    if: github.event.issue.user.login == 'katharinastarzer21'
     runs-on: ubuntu-latest
 
-    env:
-      ALLOWED_USERS: "katharinastarzer21"
-
     steps:
-      - name: Check if user is authorized
-        run: |
-          echo "Closed by: ${{ github.actor }}"
-          if [[ ",${ALLOWED_USERS}," != *",${{ github.actor }},"* ]]; then
-            echo "User ${{ github.actor }} is not allowed to deploy."
-            exit 1
-          fi
-
-      - name: Checkout main branch
+      - name: Checkout DestinE repo
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Parse Issue Data
+        id: parse
         run: |
-          pip install -r requirements.txt
-          pip install pyyaml
+          python scripts/parse_issue.py --issue_number ${{ github.event.issue.number }} --github_token ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Save issue body
-        run: echo "${{ github.event.issue.body }}" > issue_body.txt
-
-      - name: Fetch current gh-pages gallery config
+      - name: Clone Cookbook Repo
         run: |
-          git clone --branch gh-pages --depth 1 https://github.com/${{ github.repository }} temp-gh-pages
-          if [ -f temp-gh-pages/notebook_gallery.yaml ]; then
-            cp temp-gh-pages/notebook_gallery.yaml .
-            echo "Loaded existing gallery config from gh-pages"
-          else
-            echo "No existing gallery config found – starting fresh"
-            echo "domains: {}" > notebook_gallery.yaml
-          fi
+          python scripts/import_cookbook.py --repo_url "${{ steps.parse.outputs.repo_url }}" --root_path "${{ steps.parse.outputs.root_path }}"
 
-      - name: Parse issue and update gallery config
-        run: python parse_issue.py
-        env:
-          GITHUB_ENV: ${{ github.env }}
-
-      - name: DEBUG check gallery file & root path
+      - name: Install Sphinx build dependencies
         run: |
-          echo "Did parse_issue.py run?"
-          ls -la notebook_gallery.yaml || echo "notebook_gallery.yaml missing!"
-          echo "→ ROOT_PATH: $ROOT_PATH"
+          pip install -r templates/requirements.txt
 
-      - name: Clone submitted cookbook
-        run: git clone $REPO_URL submitted_repo
-
-      - name: Prepare submitted repo
+      - name: Copy default conf.py/reqs if missing
         run: |
-          if [ -f submitted_repo/README.md ] && [ ! -f submitted_repo/index.md ]; then
-            cp submitted_repo/README.md submitted_repo/index.md
-          fi
+          python scripts/ensure_defaults.py --cookbook_dir "./cookbooks/${{ steps.parse.outputs.root_path }}"
 
-      - name: Build cookbook and gallery HTML
+      - name: Build Sphinx site
+        working-directory: cookbooks/${{ steps.parse.outputs.root_path }}
         run: |
-          mkdir -p cookbooks/$ROOT_PATH
-          sphinx-build -b html submitted_repo cookbooks/$ROOT_PATH -c docs
-          sphinx-build -b html docs _temp_gallery -c docs
-          touch _temp_gallery/.nojekyll
+          sphinx-build . _build/html
 
-      - name: Backup build artifacts (to /tmp)
-        run: |
-          export TMP_PATH=/tmp/deploy_${{ github.run_id }}
-          mkdir -p $TMP_PATH
-          cp notebook_gallery.yaml $TMP_PATH/
-          cp _temp_gallery/index.html $TMP_PATH/
-          cp -r cookbooks/$ROOT_PATH $TMP_PATH/
-          echo "TMP_PATH=$TMP_PATH" >> $GITHUB_ENV
+      - name: Deploy to GitHub Pages (production)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: cookbooks/${{ steps.parse.outputs.root_path }}/_build/html
+          destination_dir: production/${{ steps.parse.outputs.root_path }}
 
-      - name: Temporarily stash changes before switching branches
+      - name: Update gallery YAML (production)
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-          git stash push -m "Temp stash before gh-pages switch"
-
-      - name: Checkout gh-pages
-        run: |
-          git fetch origin gh-pages
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-          git switch gh-pages
-          git pull
-
-      - name: Copy final files to gh-pages
-        run: |
-          cp $TMP_PATH/notebook_gallery.yaml .
-          cp $TMP_PATH/index.html .
-          mkdir -p cookbooks/$ROOT_PATH
-          cp -r $TMP_PATH/$ROOT_PATH/* cookbooks/$ROOT_PATH/
-          touch .nojekyll
-
-      - name: Remove preview for this issue
-        run: |
-          if [ -d "previews/${{ github.event.issue.number }}" ]; then
-            git rm -r previews/${{ github.event.issue.number }}
-          else
-            echo "No preview to remove"
-          fi
-
-      - name: Commit and push to gh-pages
-        run: |
-          git add notebook_gallery.yaml index.html cookbooks .nojekyll
-          git add previews/ || echo "No preview folder staged"
-          git commit -m "Promote $ROOT_PATH to production (issue #${{ github.event.issue.number }})" || echo "No changes"
-          git push origin gh-pages
+          python scripts/update_gallery.py --cookbook_dir "./cookbooks/${{ steps.parse.outputs.root_path }}" --mode production
