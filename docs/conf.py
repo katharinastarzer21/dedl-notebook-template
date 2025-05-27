@@ -1,5 +1,3 @@
-# Configuration file for the Sphinx documentation builder.
-
 import os
 import sys
 import pathlib
@@ -12,6 +10,7 @@ if pathlib.Path(__file__).parent.resolve().name == "docs":
     extensions = [
         "sphinx.ext.githubpages",
         "myst_nb",
+        "myst_parser",  # <--- HIER ergänzt
         "sphinx_design",
         "notebook_gallery_generator",
     ]
@@ -19,9 +18,9 @@ else:
     extensions = [
         "sphinx.ext.githubpages",
         "myst_nb",
+        "myst_parser",  # <--- HIER ergänzt
         "sphinx_design",
     ]
-
 # -- Project information -------------------------------------------------------
 project = 'DestinE DataLake Lab'
 copyright = '2024, Destination Earth Data Lake'
