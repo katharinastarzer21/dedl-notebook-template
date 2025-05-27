@@ -16,7 +16,7 @@ jobs:
       - name: Install required packages
         run: |
           pip install -r templates/requirements.txt
-          pip install pyyaml
+          pip install pyyaml 
 
       - name: Save issue body to file
         run: echo "${{ github.event.issue.body }}" > issue_body.txt
@@ -38,4 +38,14 @@ jobs:
       - name: Build Sphinx documentation
         run: |
           sphinx-build cookbooks/$ROOT_PATH cookbooks/$ROOT_PATH/_build/html
+
+      - name: Comment with preview link
+        uses: peter-evans/create-or-update-comment@v4
+        env:
+          ROOT_PATH: ${{ env.ROOT_PATH }}
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Preview ready:  
+            [View Cookbook Preview](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/preview/${{ env.ROOT_PATH }}/index.html)
 
