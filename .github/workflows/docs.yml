@@ -22,9 +22,13 @@ jobs:
 
       - name: Build all cookbooks
         run: |
-          for d in cookbooks/*/ ; do
-            sphinx-build "$d" "$d/_build/html"
-          done
+          if [ -d cookbooks ] && [ "$(find cookbooks -mindepth 1 -maxdepth 1 -type d | wc -l)" -gt 0 ]; then
+            for d in cookbooks/*/ ; do
+                sphinx-build "$d" "$d/_build/html"
+            done
+          else
+            echo "No cookbooks found. Skipping cookbook build."
+          fi
 
       - name: Build main docs
         run: |
