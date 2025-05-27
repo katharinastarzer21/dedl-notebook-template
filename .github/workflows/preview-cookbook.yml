@@ -39,7 +39,7 @@ jobs:
 
       - name: Clone Cookbook Repo
         run: |
-          python scripts/import_cookbook.py --repo_url "${{ steps.parse.outputs.repo_url }}" --root_path "${{ steps.parse.outputs.root_path }}"
+          python scripts/import_cookbook.py --repo_url "$REPO_URL" --root_path "$ROOT_PATH"
 
       - name: Install Sphinx build dependencies
         run: |
