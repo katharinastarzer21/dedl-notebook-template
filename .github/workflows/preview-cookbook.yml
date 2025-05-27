@@ -32,6 +32,11 @@ jobs:
         run: |
           python scripts/parse_issue.py --preview 
 
+      - name: Debug parsed env vars
+        run: |
+          echo "REPO_URL=$REPO_URL"
+          echo "ROOT_PATH=$ROOT_PATH"
+
       - name: Clone Cookbook Repo
         run: |
           python scripts/import_cookbook.py --repo_url "${{ steps.parse.outputs.repo_url }}" --root_path "${{ steps.parse.outputs.root_path }}"

@@ -7,7 +7,7 @@ print(f"✅ PREVIEW MODE: {preview_mode}")
 
 # Load gallery YAML only if not in preview
 if not preview_mode:
-    gallery_path = "notebook_gallery.yaml"
+    gallery_path = "gallery/notebook_gallery.yaml"
     if os.path.exists(gallery_path):
         print("✅ Loading existing notebook_gallery.yaml")
         with open(gallery_path) as f:
@@ -70,7 +70,7 @@ if not preview_mode:
         'root_path': root_path,
         'description': description,
         'thumbnail': thumbnail,
-        'url': f"https://katharinastarzer21.github.io/DestinE/cookbooks/{root_path}/index.html"
+        'url': f"https://katharinastarzer21.github.io/dedl-notebook-template/cookbooks/{root_path}/index.html"
     }
 
     with open('notebook_gallery.yaml', 'w') as f:
