@@ -8,4 +8,3 @@ pyyaml
 ghp-import
 snowballstemmer
 nltk
-yaml
