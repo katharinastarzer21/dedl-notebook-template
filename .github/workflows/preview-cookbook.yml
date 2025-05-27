@@ -1,28 +1,17 @@
-name: "Cookbook Preview Build"
+name: Preview New Cookbook
 
 on:
   issues:
     types: [opened, edited, labeled]
-  workflow_dispatch:
 
 jobs:
-  preview:
-    if: github.event.label.name == 'add-repo' || github.event_name == 'workflow_dispatch'
+  preview-cookbook:
+    if: github.event.label.name == 'add-repo' || contains(github.event.issue.labels.*.name, 'add-repo')
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout DestinE repo
+      - name: Checkout workflow repository
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install requirements for scripts
-        run: |
-          python -m pip install --upgrade pip
-          pip install PyYAML requests
 
       - name: Save issue body to file
         run: echo "${{ github.event.issue.body }}" > issue_body.txt
@@ -30,37 +19,18 @@ jobs:
       - name: Parse Issue Data
         id: parse
         run: |
-          python scripts/parse_issue.py --preview 
+          python scripts/parse_issue.py --preview
 
       - name: Debug parsed env vars
         run: |
           echo "REPO_URL=$REPO_URL"
           echo "ROOT_PATH=$ROOT_PATH"
 
-      - name: Clone Cookbook Repo
+      - name: Import Cookbook
         run: |
           python scripts/import_cookbook.py --repo_url "$REPO_URL" --root_path "$ROOT_PATH"
 
-      - name: Install Sphinx build dependencies
+      - name: Build Sphinx documentation
         run: |
-          pip install -r templates/requirements.txt
+          sphinx-build cookbooks/$ROOT_PATH cookbooks/$ROOT_PATH/_build/html
 
-      - name: Copy default conf.py/reqs if missing
-        run: |
-          python scripts/ensure_defaults.py --cookbook_dir "./cookbooks/${{ steps.parse.outputs.root_path }}"
-
-      - name: Build Sphinx site
-        working-directory: cookbooks/${{ steps.parse.outputs.root_path }}
-        run: |
-          sphinx-build . _build/html
-
-      - name: Deploy Preview to GitHub Pages (staging)
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: cookbooks/${{ steps.parse.outputs.root_path }}/_build/html
-          destination_dir: preview/${{ steps.parse.outputs.root_path }}
-
-      - name: Update gallery YAML (preview)
-        run: |
-          python scripts/update_gallery.py --cookbook_dir "./cookbooks/${{ steps.parse.outputs.root_path }}" --mode preview
