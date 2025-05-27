@@ -24,7 +24,7 @@ jobs:
       - name: Parse Issue Data
         id: parse
         run: |
-          python scripts/parse_issue.py --issue_number ${{ github.event.issue.number }} --github_token ${{ secrets.GITHUB_TOKEN }}
+          python scripts/parse_issue.py 
 
       - name: Clone Cookbook Repo
         run: |
