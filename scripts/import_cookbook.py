@@ -1,20 +1,22 @@
-import argparse
+import subprocess
 import os
 import shutil
-import subprocess
+import argparse
 
 def clone_repo(repo_url, dest_dir):
-    if os.path.exists(dest_dir):
-        shutil.rmtree(dest_dir)
     subprocess.check_call(['git', 'clone', repo_url, dest_dir])
 
-def copy_root(src_dir, root_path, dest_dir):
-    src_root = os.path.join(src_dir, root_path)
-    if not os.path.exists(src_root):
-        raise FileNotFoundError(f"Root path {root_path} not found in repo.")
-    if os.path.exists(dest_dir):
-        shutil.rmtree(dest_dir)
-    shutil.copytree(src_root, dest_dir)
+def copy_repo_to_rootpath(src_repo_dir, dest_cookbook_dir):
+    os.makedirs(dest_cookbook_dir, exist_ok=True)
+    for item in os.listdir(src_repo_dir):
+        if item == ".git":
+            continue  # .git-Ordner nicht kopieren
+        s = os.path.join(src_repo_dir, item)
+        d = os.path.join(dest_cookbook_dir, item)
+        if os.path.isdir(s):
+            shutil.copytree(s, d, dirs_exist_ok=True)
+        else:
+            shutil.copy2(s, d)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -24,5 +26,6 @@ if __name__ == "__main__":
 
     temp_dir = "_temp_repo"
     clone_repo(args.repo_url, temp_dir)
-    copy_root(temp_dir, args.root_path, os.path.join("cookbooks", args.root_path))
-    shutil.rmtree(temp_dir)
+
+    dest_dir = os.path.join("cookbooks", args.root_path)
+    copy_repo_to_rootpath(temp_dir, dest_dir)
