@@ -10,7 +10,7 @@ if pathlib.Path(__file__).parent.resolve().name == "docs":
     extensions = [
         "sphinx.ext.githubpages",
         "myst_nb",
-        "myst_parser",  # <--- HIER ergänzt
+        "myst_parser",  
         "sphinx_design",
         "notebook_gallery_generator",
     ]
@@ -18,7 +18,7 @@ else:
     extensions = [
         "sphinx.ext.githubpages",
         "myst_nb",
-        "myst_parser",  # <--- HIER ergänzt
+        "myst_parser",  
         "sphinx_design",
     ]
 # -- Project information -------------------------------------------------------
@@ -33,6 +33,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', "**/.git", ".pixi**", "b
 source_suffix = {
     ".ipynb": "myst-nb",
     ".myst": "myst-nb",
+    ".md": "markdown",        
+    ".rst": "restructuredtext"
 }
 
 myst_enable_extensions = [
