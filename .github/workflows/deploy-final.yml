@@ -47,7 +47,7 @@ jobs:
           python scripts/ensure_defaults.py --cookbook_dir "./cookbooks/${{ steps.parse.outputs.root_path }}"
 
       - name: Build Sphinx site
-        working-directory: cookbooks/${{ steps.parse.outputs.root_path }}
+        working-directory: cookbooks/${{ env.ROOT_PATH }}
         run: |
           sphinx-build . _build/html
 
