@@ -1,59 +1,67 @@
 import os
 import re
+import yaml
 
 INDEX_PATH = "docs/index.md"
-COOKBOOKS_DIR = "cookbooks"
+ISSUE_BODY_PATH = "issue_body.txt"
 
-# Der Marker-Text muss exakt wie in index.md stehen!
 MARKER_START = "<!-- AUTO-COOKBOOKS-START -->"
 MARKER_END = "<!-- AUTO-COOKBOOKS-END -->"
 
-def cookbook_card(name):
-    """Erzeugt eine Grid Card für ein Cookbook."""
-    return f"""::{{grid-item-card}} {name}
+def extract_fields():
+    with open(ISSUE_BODY_PATH, encoding="utf-8") as f:
+        lines = f.read().splitlines()
+
+    fields = {
+        "Repository URL": "",
+        "Cookbook Title": "",
+        "Short Description": "",
+        "Thumbnail Image URL": "",
+        "Root Path Name": ""
+    }
+
+    current = None
+    for line in lines:
+        line = line.strip().lstrip("#").strip()
+        if line in fields:
+            current = line
+        elif current and line:
+            fields[current] = line
+            current = None
+
+    return fields
+
+def generate_card(fields):
+    return f"""::{{grid-item-card}} {fields['Cookbook Title']}
 :shadow: md
-:link: ../production/{name}/index.html
-:img-top: https://placehold.co/300x200?text={name}
-Auto-generated preview for cookbook '{name}'.
+:link: cookbooks/{fields['Root Path Name']}/index.html
+:img-top: {fields['Thumbnail Image URL']}
+{fields['Short Description']}
 :::
 """
 
 def main():
-    # 1. index.md einlesen
+    fields = extract_fields()
+    card = generate_card(fields)
+
     with open(INDEX_PATH, encoding="utf-8") as f:
         content = f.read()
 
-    # 2. Marker finden
     pattern = re.compile(
         rf"({re.escape(MARKER_START)})(.*)({re.escape(MARKER_END)})",
         re.DOTALL
     )
-
     match = pattern.search(content)
     if not match:
-        raise RuntimeError(
-            f"Marker {MARKER_START} und {MARKER_END} nicht in {INDEX_PATH} gefunden!"
-        )
+        raise RuntimeError(f"⚠️ Marker {MARKER_START} und {MARKER_END} nicht in {INDEX_PATH} gefunden!")
 
-    # 3. Alle Cookbooks-Ordner finden
-    cookbooks = [
-        d for d in sorted(os.listdir(COOKBOOKS_DIR))
-        if os.path.isdir(os.path.join(COOKBOOKS_DIR, d)) and not d.startswith(".")
-    ]
+    new_cards = match.group(2).strip() + "\n\n" + card
+    new_content = f"{MARKER_START}\n{new_cards}\n{MARKER_END}"
+    final_content = content[:match.start()] + new_content + content[match.end():]
 
-    # 4. Cards generieren
-    cards = "\n".join([cookbook_card(cb) for cb in cookbooks])
-
-    # 5. Content ersetzen
-    new_content = (
-        content[:match.start(2)]
-        + "\n" + cards + "\n"
-        + content[match.end(2):]
-    )
-
-    # 6. index.md speichern
     with open(INDEX_PATH, "w", encoding="utf-8") as f:
-        f.write(new_content)
+        f.write(final_content)
+    print("✅ index.md updated successfully.")
 
 if __name__ == "__main__":
     main()
