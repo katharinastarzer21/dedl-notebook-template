@@ -42,3 +42,6 @@ functions (conceptually like FaaS) that users can invoke from their applications
 and apply on the DestinE Data Lake data.
 
 :::
+
+<!-- AUTO-COOKBOOKS-START -->
+<!-- AUTO-COOKBOOKS-END -->
