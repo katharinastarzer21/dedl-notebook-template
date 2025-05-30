@@ -34,7 +34,7 @@ def extract_fields():
 def generate_card(fields):
     return f"""::{{grid-item-card}} {fields['Cookbook Title']}
 :shadow: md
-:link: cookbooks/{fields['Root Path Name']}/index.html
+:link: https://katharinastarzer21.github.io/dedl-notebook-template/cookbooks/{fields['Root Path Name']}/index.html
 :img-top: {fields['Thumbnail Image URL']}
 {fields['Short Description']}
 :::
