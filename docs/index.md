@@ -45,12 +45,4 @@ and apply on the DestinE Data Lake data.
 
 <!-- AUTO-COOKBOOKS-START -->
 
-
-::{grid-item-card} my test
-:shadow: md
-:link: cookbooks/TESTING/index.html
-:img-top: _No response_
-First Example
-:::
-
 <!-- AUTO-COOKBOOKS-END -->
