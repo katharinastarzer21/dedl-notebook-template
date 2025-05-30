@@ -10,7 +10,7 @@ Below you can explore the available notebooks:
 
 
 ::::{grid} 2
-:gutter: 3
+:gutter: 4
 
 :::{grid-item-card} Harmonised Data Access
 :shadow: md
