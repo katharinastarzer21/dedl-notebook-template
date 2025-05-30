@@ -44,7 +44,7 @@ jobs:
 
       - name: Copy default conf.py/reqs if missing
         run: |
-          python scripts/ensure_defaults.py --cookbook_dir "./cookbooks/${{ steps.parse.outputs.root_path }}"
+          python scripts/ensure_defaults.py --cookbook_dir "./cookbooks/${{ env.ROOT_PATH }}"
 
       - name: Build Sphinx site
         working-directory: cookbooks/${{ env.ROOT_PATH }}
@@ -55,12 +55,12 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: cookbooks/${{ steps.parse.outputs.root_path }}/_build/html
+          publish_dir: cookbooks/${{ env.ROOT_PATH }}/_build/html
           destination_dir: production/${{ steps.parse.outputs.root_path }}
 
       - name: Update gallery YAML (production)
         run: |
-          python scripts/update_gallery.py --cookbook_dir "./cookbooks/${{ steps.parse.outputs.root_path }}" --mode production
+          python scripts/update_gallery.py --cookbook_dir "./cookbooks/${{ env.ROOT_PATH }}" --mode production
 
       - name: Update docs/index.md with new cookbooks
         run: python scripts/update_index.py
