@@ -62,6 +62,21 @@ jobs:
         run: |
           python scripts/update_gallery.py --cookbook_dir "./cookbooks/${{ steps.parse.outputs.root_path }}" --mode production
 
+      - name: Update docs/index.md with new cookbooks
+        run: python scripts/update_index.py
+
+      - name: Build and Deploy central docs
+        working-directory: docs
+        run: |
+          sphinx-build . _build/html
+
+      - name: Deploy central docs to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+          destination_dir: docs
+
       - name: Comment with production link
         uses: peter-evans/create-or-update-comment@v4
         with:
@@ -69,4 +84,3 @@ jobs:
           body: |
             ✅ Cookbook deployed!
             🔗 https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/production/${{ env.ROOT_PATH }}/index.html
-        
