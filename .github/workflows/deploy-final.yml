@@ -57,6 +57,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: cookbooks/${{ env.ROOT_PATH }}/_build/html
           destination_dir: production/${{ env.ROOT_PATH }}
+          keep_files: true
 
       - name: Update gallery YAML (production)
         run: |
@@ -84,6 +85,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
           destination_dir: .
+          keep_files: true
 
       - name: Comment with production link
         uses: peter-evans/create-or-update-comment@v4
