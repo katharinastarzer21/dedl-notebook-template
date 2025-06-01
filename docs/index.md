@@ -44,14 +44,14 @@ and apply on the DestinE Data Lake data.
 :::
 
 <!-- AUTO-COOKBOOKS-START -->
-::{grid-item-card} my test
+:::{grid-item-card} my test
 :shadow: md
 :link: https://katharinastarzer21.github.io/dedl-notebook-template/cookbooks/TESTING/index.html
 :img-top: _No response_
 First Example
 :::
 
-::{grid-item-card} my test
+:::{grid-item-card} my test
 :shadow: md
 :link: https://katharinastarzer21.github.io/dedl-notebook-template/cookbooks/TESTING/index.html
 :img-top: _No response_
