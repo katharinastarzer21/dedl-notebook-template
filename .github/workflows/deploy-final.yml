@@ -56,7 +56,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: cookbooks/${{ env.ROOT_PATH }}/_build/html
-          destination_dir: production/${{ steps.parse.outputs.root_path }}
+          destination_dir: production/${{ env.ROOT_PATH }}
 
       - name: Update gallery YAML (production)
         run: |
@@ -83,7 +83,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
-          destination_dir: docs
+          destination_dir: .
 
       - name: Comment with production link
         uses: peter-evans/create-or-update-comment@v4
@@ -91,4 +91,4 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             ✅ Cookbook deployed!
-            🔗 https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/cookbooks/${{ env.ROOT_PATH }}/index.html
+            🔗 https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/production/${{ env.ROOT_PATH }}/index.html
