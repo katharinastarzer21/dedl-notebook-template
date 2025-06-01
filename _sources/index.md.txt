@@ -44,13 +44,6 @@ and apply on the DestinE Data Lake data.
 :::
 
 <!-- AUTO-COOKBOOKS-START -->
-:::{grid-item-card} Second Test
-:shadow: md
-:link: https://katharinastarzer21.github.io/dedl-notebook-template/production/SECONDTEST/index.html
-:img-top: _No response_
-Second Test
-:::
-
 :::{grid-item-card} my test
 :shadow: md
 :link: https://katharinastarzer21.github.io/dedl-notebook-template/production/TESTING/index.html
