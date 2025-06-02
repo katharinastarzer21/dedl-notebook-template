@@ -22,23 +22,13 @@ jobs:
       - name: Save issue body to file
         run: echo "${{ github.event.issue.body }}" > issue_body.txt
 
-      - name: Parse Issue Data
-        id: parse
-        run: |
-          python scripts/parse_issue.py --preview
-
-      - name: Debug parsed env vars
-        run: |
-          echo "REPO_URL=$REPO_URL"
-          echo "ROOT_PATH=$ROOT_PATH"
-
       - name: Import Cookbook
         run: |
           python scripts/import_cookbook.py --repo_url "$REPO_URL" --root_path "$ROOT_PATH"
 
       - name: Build Sphinx documentation
         run: |
-          sphinx-build cookbooks/$ROOT_PATH cookbooks/$ROOT_PATH/_build/html
+          sphinx-build -b cookbooks/$ROOT_PATH cookbooks/$ROOT_PATH/_build/html
 
       - name: Deploy Preview to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
