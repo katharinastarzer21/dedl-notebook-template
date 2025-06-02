@@ -17,6 +17,7 @@ jobs:
         run: |
           pip install -r templates/requirements.txt
           pip install pyyaml 
+          pip install myst-nb
 
       - name: Save issue body to file
         run: echo "${{ github.event.issue.body }}" > issue_body.txt
@@ -37,7 +38,7 @@ jobs:
 
       - name: Build Sphinx documentation
         run: |
-           sphinx-build -b html submitted_repo submitted_repo/_build/html -c docs
+          sphinx-build -b cookbooks/$ROOT_PATH cookbooks/$ROOT_PATH/_build/html -c docs
 
       - name: Deploy Preview to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
