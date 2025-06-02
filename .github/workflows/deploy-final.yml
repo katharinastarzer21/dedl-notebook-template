@@ -41,7 +41,7 @@ jobs:
       - name: Install Sphinx build dependencies
         run: |
           pip install -r templates/requirements.txt
-          pipi install myst-nb
+          pip install myst-nb
 
       - name: Copy default conf.py/reqs if missing
         run: |
