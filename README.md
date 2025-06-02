@@ -1,6 +1,6 @@
 # Destination Earth Notebook Gallery
 
-This repository hosts the **Destination Earth Notebook Gallery**, a curated collection of scientific notebooks contributed by the community.
+This repository hosts the Destination Earth [Notebook Gallery](https://katharinastarzer21.github.io/dedl-notebook-template/index.html), a curated collection of scientific notebooks contributed by the community.
 
 ---
 
@@ -35,11 +35,3 @@ Once submitted, the following happens automatically:
 - ✅ The notebook is deployed to GitHub Pages.
 - ✅ A preview link is added to the GitHub issue.
 - ✅ Once approved and the issue is closed, your notebook goes live on the main site!
-
----
-
-
-## 🔗 Useful links
-
-- [Notebook Gallery](https://katharinastarzer21.github.io/dedl-notebook-template/index.html)
-
