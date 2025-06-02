@@ -19,7 +19,7 @@ This gallery allows you to:
 Contributions are automated via **GitHub Issues**. Just follow these steps:
 
 1. Go to the [Issues page](https://github.com/katharinastarzer21/dedl-notebook-template/issues).
-2. Create a new issue using the `Add Cookbook` issue template.
+2. Create a new issue using the `Add New Cookbook` issue template.
 3. Provide the following information:
    - **Repository URL**: Public GitHub repository link of your notebook.
    *Your repository should be forked from this [template repository](https://github.com/katharinastarzer21/template_dedl_repository) to ensure compatibility.*
@@ -42,5 +42,4 @@ Once submitted, the following happens automatically:
 ## 🔗 Useful links
 
 - [Notebook Gallery](https://katharinastarzer21.github.io/dedl-notebook-template/index.html)
-- [Add a Cookbook via GitHub Issue](https://github.com/katharinastarzer21/dedl-notebook-template/issues/new?assignees=&labels=add-repo&template=add-cookbook.yml)
 
