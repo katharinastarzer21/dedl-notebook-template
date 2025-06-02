@@ -25,6 +25,9 @@ jobs:
       - name: Import Cookbook
         run: |
           python scripts/import_cookbook.py --repo_url "$REPO_URL" --root_path "$ROOT_PATH"
+        env:
+          REPO_URL: ${{ env.REPO_URL }}
+          ROOT_PATH: ${{ env.ROOT_PATH }}
 
       - name: Build Sphinx documentation
         run: |
