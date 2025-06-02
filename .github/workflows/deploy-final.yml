@@ -46,16 +46,22 @@ jobs:
         run: |
           python scripts/ensure_defaults.py --cookbook_dir "./cookbooks/${{ env.ROOT_PATH }}"
 
-      - name: Build Sphinx site
-        working-directory: cookbooks/${{ env.ROOT_PATH }}
+      - name: Clone submitted repository
         run: |
-          sphinx-build . _build/html
+          git clone "$REPO_URL" submitted_repo
+          if [ -f submitted_repo/README.md ] && [ ! -f submitted_repo/index.md ]; then
+            cp submitted_repo/README.md submitted_repo/index.md
+          fi
+
+      - name: Build Sphinx site
+        run: |
+          sphinx-build submitted_repo submitted_repo/_build/html
 
       - name: Deploy to GitHub Pages (production)
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: cookbooks/${{ env.ROOT_PATH }}/_build/html
+          publish_dir: submitted_repo/_build/html
           destination_dir: production/${{ env.ROOT_PATH }}
           keep_files: true
 
