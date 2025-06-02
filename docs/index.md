@@ -51,4 +51,11 @@ and apply on the DestinE Data Lake data.
 First Example
 :::
 
+:::{grid-item-card} Second Test
+:shadow: md
+:link: https://katharinastarzer21.github.io/dedl-notebook-template/production/SECONDTEST/index.html
+:img-top: _No response_
+Second Test
+:::
+
 <!-- AUTO-COOKBOOKS-END -->
