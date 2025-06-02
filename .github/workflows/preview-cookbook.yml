@@ -37,7 +37,7 @@ jobs:
 
       - name: Build Sphinx documentation
         run: |
-          sphinx-build cookbooks/$ROOT_PATH cookbooks/$ROOT_PATH/_build/html
+           sphinx-build -b html submitted_repo submitted_repo/_build/html -c docs
 
       - name: Deploy Preview to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
