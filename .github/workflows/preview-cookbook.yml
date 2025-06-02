@@ -35,6 +35,17 @@ jobs:
         run: |
           python scripts/import_cookbook.py --repo_url "$REPO_URL" --root_path "$ROOT_PATH"
 
+      - name: Ensure index.md includes notebooks
+        run: |
+          INDEX_PATH="cookbooks/$ROOT_PATH/index.md"
+          if ! grep -q "toctree" "$INDEX_PATH"; then
+            echo -e "# Auto-generated index\n\n\`\`\`{toctree}\n:maxdepth: 2" > "$INDEX_PATH"
+            for f in cookbooks/$ROOT_PATH/notebooks/*.ipynb; do
+              echo "notebooks/$(basename "$f")" >> "$INDEX_PATH"
+            done
+            echo '```' >> "$INDEX_PATH"
+          fi
+
       - name: Build Sphinx documentation
         run: |
           sphinx-build cookbooks/$ROOT_PATH cookbooks/$ROOT_PATH/_build/html
