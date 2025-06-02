@@ -54,6 +54,17 @@ jobs:
             cp submitted_repo/README.md submitted_repo/index.md
           fi
 
+      - name: Ensure index.md includes notebooks
+        run: |
+          INDEX_PATH="cookbooks/$ROOT_PATH/index.md"
+          if ! grep -q "toctree" "$INDEX_PATH"; then
+            echo -e "# Auto-generated index\n\n\`\`\`{toctree}\n:maxdepth: 2" > "$INDEX_PATH"
+            for f in cookbooks/$ROOT_PATH/notebooks/*.ipynb; do
+              echo "notebooks/$(basename "$f")" >> "$INDEX_PATH"
+            done
+            echo '```' >> "$INDEX_PATH"
+          fi
+
       - name: Build Sphinx site
         run: |
           sphinx-build submitted_repo submitted_repo/_build/html
