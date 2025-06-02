@@ -67,7 +67,7 @@ jobs:
 
       - name: Build Sphinx site
         run: |
-          sphinx-build submitted_repo submitted_repo/_build/html
+          sphinx-build -b html submitted_repo submitted_repo/_build/html -c docs
 
       - name: Deploy to GitHub Pages (production)
         uses: peaceiris/actions-gh-pages@v4
