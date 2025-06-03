@@ -26,7 +26,7 @@ Contributions are automated via **GitHub Issues**. Just follow these steps:
    - **Title**: A short title for your contribution.
    - **Short description**: 1-2 sentences about what your notebook demonstrates.
    - **Thumbnail image URL**: (Optional) A small image (e.g. PNG) to show on the gallery card.
-   - **Root Path Name**: Folder name under which your content will be published (e.g., `my-climate-notebook`).
+   - **Root Path Name**: Folder name under which your content will be published (e.g., `STACK`).
 
 Once submitted, the following happens automatically:
 
